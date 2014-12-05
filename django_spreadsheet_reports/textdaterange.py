@@ -1,4 +1,5 @@
-import datetime
+from datetime import timedelta
+from django.utils import timezone
 import dateutil.parser
 import re
 
@@ -67,12 +68,12 @@ class TextDateRange(object):
         daysagoregex = re.compile(r'(\d+) ?days ?ago')
         dateregex = re.compile('^(\d{4})-(\d{1,2})-(\d{1,2})$')
         if token.lower() == 'yesterday':
-            return self._format_datetime(datetime.datetime.today() - datetime.timedelta(days=1))
+            return self._format_datetime(timezone.now() - timedelta(days=1))
         elif token.lower() == 'today':
-            return self._format_datetime(datetime.datetime.today())
+            return self._format_datetime(timezone.now())
         elif daysagoregex.match(token.lower()):
             days_ago = int(daysagoregex.match(token.lower()).groups()[0])
-            return self._format_datetime(datetime.datetime.today() - datetime.timedelta(days=days_ago))
+            return self._format_datetime(timezone.now() - timedelta(days=days_ago))
         elif dateregex.match(token):
             groups = dateregex.match(token).groups()
             return "%04d-%02d-%02d" % (int(groups[0]), int(groups[1]), int(groups[2]))
@@ -80,14 +81,14 @@ class TextDateRange(object):
             raise ParseError
         
     def _set_start_end_from_days_ago(self, days_ago):
-            date = self._format_datetime(datetime.datetime.today() - datetime.timedelta(days=days_ago))
+            date = self._format_datetime(timezone.now() - timedelta(days=days_ago))
             self.start, self.end = date, date
         
     def days_list(self):
-        format = '%Y-%m-%d'
-        date = datetime.datetime.strptime(self.start, format)
-        enddate = datetime.datetime.strptime(_strip_time(self.end), format)
-        increment_by = datetime.timedelta(days=1)
+        format_str = '%Y-%m-%d'
+        date = timezone.now().strptime(self.start, format_str)
+        enddate = timezone.now().strptime(_strip_time(self.end), format_str)
+        increment_by = timedelta(days=1)
         output = []
         while date <= enddate:
             output.append(self._format_datetime(date))
@@ -95,11 +96,11 @@ class TextDateRange(object):
         return output
     
     def tuple(self):
-        return (self.start, self.end)
+        return self.start, self.end
 
     def num_days(self):
-        d1 = datetime.datetime.strptime(_strip_time(self.end), '%Y-%m-%d')
-        d2 = datetime.datetime.strptime(self.start, '%Y-%m-%d')
+        d1 = timezone.now().strptime(_strip_time(self.end), '%Y-%m-%d')
+        d2 = timezone.now().strptime(self.start, '%Y-%m-%d')
         return (d1 - d2).days + 1
 
     @property
@@ -110,9 +111,10 @@ class TextDateRange(object):
     def end_dateobj(self):
         return dateutil.parser.parse(self.end)
     
-    def _format_datetime(self, datetime):
-        format = '%Y-%m-%d'
-        return datetime.strftime(format)
+    @staticmethod
+    def _format_datetime(datetime):
+        format_str = '%Y-%m-%d'
+        return datetime.strftime(format_str)
 
     def __str__(self):
         return "{0} -> {1}".format(self.start, self.end)

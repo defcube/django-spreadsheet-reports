@@ -46,7 +46,7 @@
           <thead>
           <tr>
               {% for column in table.columns %}
-              <td class="td_wrap">{% if column.sortable %}<a href="{% append_to_get sort=column.name_toggled %}">{{ column }}</a>{% else %}{{column}}{% endif %}</td>
+              <td class="td_wrap">{% if column.sortable %}<a href="{% append_to_get sort=column.order_by_alias.next %}">{{ column.name }}</a>{% else %}{{column.name}}{% endif %}</td>
               {% endfor %}
           </tr>
           </thead>

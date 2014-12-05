@@ -53,7 +53,7 @@ def append_to_get(_tag_name, d):
 
 @register.simple_tag
 def display_column(table, value, counter):
-    key = list(table.columns._columns.keys())[counter]
+    key = table.columns[counter].accessor
     if hasattr(table.columns[key].column, 'choices'):
         d = dict(table.columns[key].column.choices)
         if value is None:

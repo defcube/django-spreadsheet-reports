@@ -1,5 +1,7 @@
+from datetime import timedelta
 import django.forms
 from django.http import HttpResponse
+from django.utils import timezone
 
 
 class RepChoiceField(django.forms.fields.ChoiceField):
@@ -120,20 +122,17 @@ class DateFilter(_NamedValueObject):
     def _choicelist(self):
         choicelist = ['10daysago:today', 'today', 'yesterday', '2daysago', '3daysago', '4daysago',
                       '5daysago', '6daysago', '7daysago', '90daysago:today', 'all time']
-        import datetime
-
-
-        n = datetime.datetime.now()
+        n = timezone.now()
         for i in range(12):
             n = n.replace(day=1)
-            nextmonth = n + datetime.timedelta(days=31)
-            lastdayofmonth = nextmonth.replace(day=1) - datetime.timedelta(days=1)
+            nextmonth = n + timedelta(days=31)
+            lastdayofmonth = nextmonth.replace(day=1) - timedelta(days=1)
             choicelist.append(
                 '{0}-{1:02}-16:{0}-{1:02}-{2:02}'.format(n.year, n.month, lastdayofmonth.day))
             choicelist.append('{0}-{1:02}-01:{0}-{1:02}-15'.format(n.year, n.month))
             choicelist.append(
                 '{0}-{1:02}-01:{0}-{1:02}-{2:02}'.format(n.year, n.month, lastdayofmonth.day))
-            n = n - datetime.timedelta(days=1)
+            n = n - timedelta(days=1)
         return choicelist
 
     def __init__(self, value, name=None):
@@ -323,8 +322,6 @@ class Report(object):
     def render_to_response(self, request):
         from django import shortcuts, template
         from . import models
-
-
         context = template.RequestContext(request)
         formclass = self.get_form_class(request)
         if request.GET.get('form_submitted'):
