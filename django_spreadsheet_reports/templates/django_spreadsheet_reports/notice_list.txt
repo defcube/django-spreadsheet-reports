@@ -1,0 +1,13 @@
+New notices for {% now "M j Y" %}
+=====================================
+
+{% if notices %}
+Latest notices
+==============
+{% for notice in notices %}
+* {{notice.date}} report {{notice.slug}} {{notice.group_name}} changed: {{notice.get_change_pct}}% (expected {{notice.low_limit}} - {{notice.high_limit}}, received {{notice.group_val}}).
+{% endfor %}
+
+{% else %}
+There aren't any notices for today.
+{% endif %}

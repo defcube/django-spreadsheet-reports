@@ -1,0 +1,5 @@
+Django==1.7.1
+django-tables2==0.15.0
+lockfile==0.10.2
+python-dateutil==2.3
+six==1.8.0

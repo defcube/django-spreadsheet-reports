@@ -1,0 +1,81 @@
+{% extends "admin/base_reports.html" %}
+{% load admin_static reports_tags %}
+
+{% block bodyclass %}change-list{% endblock %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'admin/css/changlelists.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'admin/css/forms.css' %}" />
+  <style type="text/css">
+	thead td {border-left: 1px solid #ddd;border-bottom: 1px solid #ddd;}
+	.td_wrap a {color:#666666;text-align:left;font-size:11px;}
+  </style>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.js"></script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    {% include "defreports/domwindow.js" %}
+  });
+  </script>
+{% endblock %}
+
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+     <a href="{% url 'defreports' %}">Home</a>
+</div>
+{% endblock %}
+
+{% block coltype %}flex{% endblock %}
+
+
+{% block content %}
+{% include "defreports/report.js" %}
+<div id="groupBys" style="display:none;" >
+  <h1>Group by</h1>
+  <div id="groupbychoices">
+  </div>
+</div>
+  <div id="content-main">
+      <div class="module" style='overflow:auto' id="changelist">
+      
+         <div style='padding-bottom:15px;overflow:auto;'>   
+          <h2>{{report_name}}</h2>
+	  {% if table %}
+          <table cellspacing='0' class="report_content">
+          <thead>
+          <tr>
+              {% for column in table.columns %}
+              <td class="td_wrap">{% if column.sortable %}<a href="{% append_to_get sort=column.name_toggled %}">{{ column }}</a>{% else %}{{column}}{% endif %}</td>
+              {% endfor %}
+          </tr>
+          </thead>
+          <tbody>
+          {% for row in table.rows %}
+              <tr class='{% cycle row1,row2 %}'> 
+              {% for value in row %}
+                  <td style='white-space:nowrap;' id="{{value}}">{% display_column table value forloop.counter0  %}</td>
+              {% endfor %}
+              </tr>
+          {% endfor %}
+          </tbody>
+          </table>
+	  {% endif %}
+	  {% if not table %}
+	  <p>No Data! Check for form errors.</p>
+	  {% endif %}
+       </div>   
+            <h2 style='margin-top:30px;'>Report Settings</h2>
+	    
+            <form method='get'>
+            {{form.as_p}}            
+            <p>
+                <input type='submit' name='submit'>
+                <input type='submit' name='submit' value='Export to CSV'>
+            </p>
+            </form>
+	    <p>Note: Choices are only shown if there are records in the current query. It will often be necessary to loosen the filters in order to see all choices.</p>
+            
+      </div>
+    </div>
+{% endblock %}

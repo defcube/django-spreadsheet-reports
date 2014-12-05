@@ -1,0 +1,53 @@
+{% extends "admin/base_reports.html" %}
+{% load reports_tags %}
+
+{% block content %}
+
+<div id="content" class="colMS">
+
+    <h1>Tracking administration</h1>
+
+    <div id="content-main">
+
+        <div class="module">
+            
+            <h2>Available Reports</h2>
+            <ul>
+            {% for report in available_reports %}
+            <li><a href="{{report.url}}">{{report.name}}</a></li>
+            {% endfor %}
+            </ul>
+            
+            {% if bookmarks %}
+            <h2>Bookmarked Reports</h2>
+            <ul>
+            {% for report in bookmarks %}
+            <li><a href="{{report.uri}}">{{report.name}}</a></li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+	    
+	    {% if daily_reports %}
+            <h2>Daily Reports</h2>
+	    <ul>
+	      {% for report in daily_reports %}
+		<li><a href="{{report.url}}">{{report.name}}</a></li>
+	      {% endfor %}
+	    </ul>
+	    {% endif %}
+
+	    {% if weekly_reports %}
+	    <h2>Weekly Reports</h2>
+	    <ul>
+	      {% for report in weekly_reports %}
+	      <li><a href="{{report.url}}">{{report.name}}</a></li>
+	      {% endfor %}
+	    </ul>
+	    {% endif %}
+	    {% show_notice_list %}
+
+        </div>
+    </div>
+    
+</div>
+{% endblock %} 

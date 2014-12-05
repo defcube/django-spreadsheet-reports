@@ -1,0 +1,12 @@
+{% if notices %}
+<h2>Latest notices</h2>
+<ul>
+  {% for notice in notices %}
+    <li><strong>{{notice.date}}</strong>
+    report {{notice.slug}} 
+    {{notice.group_name}} changed:
+    {{notice.get_change_pct}}% (expected {{notice.low_limit}} - 
+    {{notice.high_limit}}, received {{notice.group_val}})</li>
+  {% endfor %}
+</ul>
+{% endif %}
