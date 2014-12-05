@@ -1,4 +1,0 @@
-= Project history
-I was heavily inspired by http://code.google.com/p/django-reporting/. After playing
-with django-reporting, I was wishing parts of it were implemented differently. And so,
-defreports was born.

@@ -1,4 +1,4 @@
-Django==1.7.1
+Django>=1.5.0
 django-tables2==0.15.0
 lockfile==0.10.2
 python-dateutil==2.3
