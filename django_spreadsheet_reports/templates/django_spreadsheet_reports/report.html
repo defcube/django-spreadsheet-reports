@@ -14,7 +14,7 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.js"></script>
   <script type="text/javascript">
   $(document).ready(function(){
-    {% include "defreports/domwindow.js" %}
+    {% include "django_spreadsheet_reports/domwindow.js" %}
   });
   </script>
 {% endblock %}
@@ -22,7 +22,7 @@
 
 {% block breadcrumbs %}
 <div class="breadcrumbs">
-     <a href="{% url 'defreports' %}">Home</a>
+     <a href="{% url 'django_spreadsheet_reports' %}">Home</a>
 </div>
 {% endblock %}
 
@@ -30,7 +30,7 @@
 
 
 {% block content %}
-{% include "defreports/report.js" %}
+{% include "django_spreadsheet_reports/report.js" %}
 <div id="groupBys" style="display:none;" >
   <h1>Group by</h1>
   <div id="groupbychoices">
